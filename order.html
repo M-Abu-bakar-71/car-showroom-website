@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Order {{ car.brand }} {{ car.model }} - Premium Car Showroom{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('cars') }}">Cars</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('car_detail', car_id=car.id) }}">{{ car.brand }} {{ car.model }}</a></li>
+            <li class="breadcrumb-item active">Order</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Car Details</h4>
+                </div>
+                <div class="card-body">
+                    {% if car.image_url %}
+                    <img src="{{ car.image_url }}" class="card-img-top car-image mb-3" alt="{{ car.brand }} {{ car.model }}">
+                    {% else %}
+                    <div class="card-img-top car-image-placeholder mb-3">
+                        <i class="fas fa-car fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <h5>{{ car.brand }} {{ car.model }}</h5>
+                    <p><strong>Year:</strong> {{ car.year }}</p>
+                    <p><strong>Price:</strong> <span class="price-tag">${{ "{:,.2f}".format(car.price) }}</span></p>
+                    <p><strong>Description:</strong> {{ car.description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-container">
+                <h2 class="text-center mb-4">Place Your Order</h2>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.customer_name.label(class="form-label") }}
+                        {% if form.customer_name.errors %}
+                            {{ form.customer_name(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.customer_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.customer_name(class="form-control", placeholder="Enter your full name") }}
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.customer_email.label(class="form-label") }}
+                        {% if form.customer_email.errors %}
+                            {{ form.customer_email(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.customer_email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.customer_email(class="form-control", placeholder="Enter your email") }}
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.customer_phone.label(class="form-label") }}
+                        {% if form.customer_phone.errors %}
+                            {{ form.customer_phone(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.customer_phone.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.customer_phone(class="form-control", placeholder="Enter your phone number") }}
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.customer_address.label(class="form-label") }}
+                        {% if form.customer_address.errors %}
+                            {{ form.customer_address(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.customer_address.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.customer_address(class="form-control", placeholder="Enter your complete address", rows="4") }}
+                        {% endif %}
+                    </div>
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Order Information</h6>
+                        <p class="mb-1">Your order will be processed and our team will contact you within 24 hours.</p>
+                        <p class="mb-0">A confirmation email will be sent to {{ current_user.email }}</p>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-success btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Our Cars - Premium Car Showroom{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Our Premium Collection</h1>
+    
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        
+        <!-- Search by Brand -->
+        <div class="col-md-6">
+            <form method="GET" action="{{ url_for('cars') }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="brand" placeholder="Search by brand..." value="{{ selected_brand }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Brand Buttons -->
+        <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2">
+
+                <!-- ALL BRANDS button -->
+                <a href="{{ url_for('cars') }}"
+                   class="btn btn-outline-primary {% if not selected_brand %}active{% endif %}">
+                    All Brands
+                </a>
+
+                <!-- Auto-generated buttons -->
+                {% for b in brands %}
+                <a href="{{ url_for('cars', brand=b) }}"
+                   class="btn btn-outline-primary {% if selected_brand == b %}active{% endif %}">
+                    {{ b }}
+                </a>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cars Grid -->
+    <div class="row">
+
+        {% if cars %}
+            {% for car in cars %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 car-card">
+
+                    <!-- Car Image -->
+                    {% if car.image_url %}
+                    <img src="{{ car.image_url }}" class="card-img-top car-image"
+                         alt="{{ car.brand }} {{ car.model }}">
+                    {% else %}
+                    <div class="card-img-top car-image-placeholder d-flex align-items-center justify-content-center">
+                        <i class="fas fa-car fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+
+                    <!-- Car Details -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ car.year }}</span>
+                            <span class="ms-2 badge bg-success">
+                                ${{ "{:,.2f}".format(car.price) }}
+                            </span>
+                        </p>
+
+                        <p class="card-text">{{ car.description|truncate(100) }}</p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('car_detail', car_id=car.id) }}"
+                               class="btn btn-sm btn-outline-primary">View Details</a>
+
+                            {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('order_car', car_id=car.id) }}"
+                               class="btn btn-sm btn-primary">Order Now</a>
+                            {% else %}
+                            <a href="{{ url_for('login') }}"
+                               class="btn btn-sm btn-primary">Login to Order</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        
+        {% else %}
+            <!-- No Cars Found -->
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <h4>No cars found</h4>
+                    <p>Try adjusting your search criteria.</p>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

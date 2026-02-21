@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Car - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('admin_cars') }}">Manage Cars</a></li>
+            <li class="breadcrumb-item active">Edit Car</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Edit Car: {{ car.brand }} {{ car.model }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.brand.label(class="form-label") }}
+                                {% if form.brand.errors %}
+                                    {{ form.brand(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.brand.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.brand(class="form-control") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.model.label(class="form-label") }}
+                                {% if form.model.errors %}
+                                    {{ form.model(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.model.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.model(class="form-control") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.year.label(class="form-label") }}
+                                {% if form.year.errors %}
+                                    {{ form.year(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.year.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.year(class="form-control") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.price.label(class="form-label") }}
+                                {% if form.price.errors %}
+                                    {{ form.price(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.price.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.price(class="form-control") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.image_url.label(class="form-label") }}
+                            {% if form.image_url.errors %}
+                                {{ form.image_url(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.image_url.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.image_url(class="form-control") }}
+                            {% endif %}
+                            <div class="form-text">Enter a URL for the car image. You can use Unsplash for free high-quality images.</div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {% if form.description.errors %}
+                                {{ form.description(class="form-control is-invalid", rows="4") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.description(class="form-control", rows="4") }}
+                            {% endif %}
+                        </div>
+                        <div class="mb-3 form-check">
+                            {{ form.available(class="form-check-input") }}
+                            {{ form.available.label(class="form-check-label") }}
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin_cars') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
